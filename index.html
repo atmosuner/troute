@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#10231f" />
+    <title>Troute Travel Itinerary</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Troute</p>
+          <h1>Trip itinerary</h1>
+        </div>
+        <button class="icon-button" id="themeToggle" type="button" aria-label="Toggle theme" title="Toggle theme">
+          <span aria-hidden="true">◐</span>
+        </button>
+      </header>
+
+      <main>
+        <section class="trip-overview" aria-labelledby="tripTitle">
+          <div class="trip-title">
+            <div>
+              <label for="tripName">Trip name</label>
+              <input id="tripName" type="text" autocomplete="off" />
+            </div>
+            <div>
+              <label for="travelerName">Traveler</label>
+              <input id="travelerName" type="text" autocomplete="name" />
+            </div>
+          </div>
+
+          <div class="date-strip" aria-label="Trip days" id="dateStrip"></div>
+        </section>
+
+        <section class="workspace">
+          <div class="schedule-column">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow" id="selectedDateLabel">Today</p>
+                <h2 id="dayTitle">Daily schedule</h2>
+              </div>
+              <button class="primary-button" id="addStopButton" type="button">Add stop</button>
+            </div>
+
+            <div class="timeline" id="timeline" aria-live="polite"></div>
+          </div>
+
+          <aside class="details-panel" aria-label="Maps and reservations">
+            <div class="panel-section map-section">
+              <div class="section-heading compact">
+                <div>
+                  <p class="eyebrow">Map</p>
+                  <h2 id="mapTitle">Daily route</h2>
+                </div>
+                <a id="mapsLink" class="text-button" href="#" target="_blank" rel="noreferrer">Open</a>
+              </div>
+              <iframe id="mapFrame" title="Selected itinerary map" loading="lazy"></iframe>
+            </div>
+
+            <div class="panel-section">
+              <div class="section-heading compact">
+                <div>
+                  <p class="eyebrow">Reservations</p>
+                  <h2>Bookings</h2>
+                </div>
+              </div>
+              <div id="reservations" class="reservation-list"></div>
+            </div>
+          </aside>
+        </section>
+
+        <section class="tools-band" aria-label="Itinerary tools">
+          <div class="import-grid">
+            <div>
+              <h2>Create or import</h2>
+              <p>
+                Paste a plan, upload a JSON itinerary, or start from the included sample. Your edits stay in this browser.
+              </p>
+            </div>
+            <div class="tool-actions">
+              <label class="file-button">
+                Upload JSON
+                <input id="fileInput" type="file" accept="application/json,.json" />
+              </label>
+              <button id="sampleButton" type="button">Use sample</button>
+              <button id="exportButton" type="button">Export JSON</button>
+            </div>
+          </div>
+
+          <form id="aiForm" class="ai-import">
+            <label for="aiText">Itinerary notes</label>
+            <textarea
+              id="aiText"
+              rows="7"
+              placeholder="Example: 2026-06-12 09:00 Breakfast at Van Kahvalti Evi, Istanbul. Reservation: table for 2, confirmation TR-481."
+            ></textarea>
+            <button class="primary-button" type="submit">Create program</button>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="stopDialog">
+      <form method="dialog" id="stopForm">
+        <div class="dialog-header">
+          <h2 id="dialogTitle">Add stop</h2>
+          <button class="icon-button" value="cancel" type="submit" aria-label="Close" title="Close">×</button>
+        </div>
+        <div class="form-grid">
+          <label>
+            Date
+            <input id="stopDate" name="date" type="date" required />
+          </label>
+          <label>
+            Time
+            <input id="stopTime" name="time" type="time" required />
+          </label>
+          <label>
+            Title
+            <input id="stopTitle" name="title" type="text" required />
+          </label>
+          <label>
+            Location
+            <input id="stopLocation" name="location" type="text" required />
+          </label>
+          <label class="full">
+            Notes
+            <textarea id="stopNotes" name="notes" rows="3"></textarea>
+          </label>
+          <label>
+            Reservation
+            <input id="stopReservation" name="reservation" type="text" />
+          </label>
+          <label>
+            Confirmation
+            <input id="stopConfirmation" name="confirmation" type="text" />
+          </label>
+        </div>
+        <menu>
+          <button value="cancel" type="submit">Cancel</button>
+          <button class="primary-button" id="saveStopButton" value="default" type="submit">Save</button>
+        </menu>
+      </form>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
