@@ -1,6 +1,6 @@
-const STORAGE_KEY = "troute-itinerary-v1";
+const STORAGE_KEY = "troute-itinerary-v2";
 
-const sampleTrip = {
+const sampleTrip = window.TROUTE_DEFAULT_TRIP || {
   name: "Istanbul Long Weekend",
   traveler: "Atmos",
   days: [
@@ -95,7 +95,8 @@ const elements = {
   stopLocation: document.querySelector("#stopLocation"),
   stopNotes: document.querySelector("#stopNotes"),
   stopReservation: document.querySelector("#stopReservation"),
-  stopConfirmation: document.querySelector("#stopConfirmation")
+  stopConfirmation: document.querySelector("#stopConfirmation"),
+  stopMapUrl: document.querySelector("#stopMapUrl")
 };
 
 render();
@@ -160,7 +161,8 @@ function normalizeTrip(nextTrip) {
           location: stop.location || "Location not set",
           notes: stop.notes || "",
           reservation: stop.reservation || "",
-          confirmation: stop.confirmation || ""
+          confirmation: stop.confirmation || "",
+          mapUrl: stop.mapUrl || ""
         }))
       }))
       .filter((day) => day.date)
@@ -241,8 +243,9 @@ function renderStop(stop) {
 function renderMap(stops) {
   const query = stops[0]?.location || trip.name || "Istanbul";
   const encoded = encodeURIComponent(query);
+  const mapUrl = stops[0]?.mapUrl || `https://www.google.com/maps/search/?api=1&query=${encoded}`;
   elements.mapTitle.textContent = stops.length ? stops[0].location : "Daily route";
-  elements.mapsLink.href = `https://www.google.com/maps/search/?api=1&query=${encoded}`;
+  elements.mapsLink.href = mapUrl;
   elements.mapFrame.src = `https://www.openstreetmap.org/export/embed.html?layer=mapnik&query=${encoded}`;
 }
 
@@ -276,6 +279,7 @@ function openStopDialog(stop) {
   elements.stopNotes.value = stop?.notes || "";
   elements.stopReservation.value = stop?.reservation || "";
   elements.stopConfirmation.value = stop?.confirmation || "";
+  elements.stopMapUrl.value = stop?.mapUrl || "";
   elements.stopDialog.showModal();
 }
 
@@ -287,7 +291,8 @@ function saveStopFromDialog() {
     location: elements.stopLocation.value.trim(),
     notes: elements.stopNotes.value.trim(),
     reservation: elements.stopReservation.value.trim(),
-    confirmation: elements.stopConfirmation.value.trim()
+    confirmation: elements.stopConfirmation.value.trim(),
+    mapUrl: elements.stopMapUrl.value.trim()
   };
 
   const date = elements.stopDate.value;
@@ -381,7 +386,8 @@ function createTripFromText(text) {
       location: locationMatch?.[1]?.trim() || titlePart || "Location not set",
       notes: noteParts.join(". "),
       reservation: reservationMatch?.[1]?.trim() || "",
-      confirmation: confirmationMatch?.[1]?.trim() || ""
+      confirmation: confirmationMatch?.[1]?.trim() || "",
+      mapUrl: ""
     });
   });
 
